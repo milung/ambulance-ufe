@@ -29,7 +29,6 @@
   "dependencies": {
     "@material/web": "^1.0.0-pre.12",
     "@stencil/core": "^4.0.0",
-    "babel-jest": "^29.6.0",
     "puppeteer": "^20.7.4"
   },
   "devDependencies": {

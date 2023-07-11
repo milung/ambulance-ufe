@@ -1,4 +1,4 @@
-name: Ambulance uFE Ci
+name: Ambulance uFE CI
 on:
   push:
     branches: [ "main" ]
