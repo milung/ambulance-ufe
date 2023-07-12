@@ -13,7 +13,7 @@
   "unpkg": "dist/ambulance-ufe/ambulance-ufe.esm.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ionic-team/stencil-component-starter.git"
+    "url": "https://github.com/ionic-team/stencil-component-starter.git" 
   },
   "files": [
     "dist/",

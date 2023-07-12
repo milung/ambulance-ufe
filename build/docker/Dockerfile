@@ -18,7 +18,7 @@ RUN ./build.sh
 
 ### scratch image - no additional dependencies only server process
 FROM scratch
-
+ENV CSP_HEADER=false
 COPY --from=spa-build /app/server /server
 CMD ["/server"]
 EXPOSE 8080
