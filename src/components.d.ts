@@ -6,10 +6,36 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
+    interface PfxAmbulanceWlApp {
+        "basePath": string;
+    }
+    interface PfxAmbulanceWlEditor {
+        "entryId": string;
+    }
     interface PfxAmbulanceWlList {
     }
 }
+export interface PfxAmbulanceWlEditorCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLPfxAmbulanceWlEditorElement;
+}
+export interface PfxAmbulanceWlListCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLPfxAmbulanceWlListElement;
+}
 declare global {
+    interface HTMLPfxAmbulanceWlAppElement extends Components.PfxAmbulanceWlApp, HTMLStencilElement {
+    }
+    var HTMLPfxAmbulanceWlAppElement: {
+        prototype: HTMLPfxAmbulanceWlAppElement;
+        new (): HTMLPfxAmbulanceWlAppElement;
+    };
+    interface HTMLPfxAmbulanceWlEditorElement extends Components.PfxAmbulanceWlEditor, HTMLStencilElement {
+    }
+    var HTMLPfxAmbulanceWlEditorElement: {
+        prototype: HTMLPfxAmbulanceWlEditorElement;
+        new (): HTMLPfxAmbulanceWlEditorElement;
+    };
     interface HTMLPfxAmbulanceWlListElement extends Components.PfxAmbulanceWlList, HTMLStencilElement {
     }
     var HTMLPfxAmbulanceWlListElement: {
@@ -17,13 +43,25 @@ declare global {
         new (): HTMLPfxAmbulanceWlListElement;
     };
     interface HTMLElementTagNameMap {
+        "pfx-ambulance-wl-app": HTMLPfxAmbulanceWlAppElement;
+        "pfx-ambulance-wl-editor": HTMLPfxAmbulanceWlEditorElement;
         "pfx-ambulance-wl-list": HTMLPfxAmbulanceWlListElement;
     }
 }
 declare namespace LocalJSX {
+    interface PfxAmbulanceWlApp {
+        "basePath"?: string;
+    }
+    interface PfxAmbulanceWlEditor {
+        "entryId"?: string;
+        "onEditor-closed"?: (event: PfxAmbulanceWlEditorCustomEvent<string>) => void;
+    }
     interface PfxAmbulanceWlList {
+        "onEntry-clicked"?: (event: PfxAmbulanceWlListCustomEvent<string>) => void;
     }
     interface IntrinsicElements {
+        "pfx-ambulance-wl-app": PfxAmbulanceWlApp;
+        "pfx-ambulance-wl-editor": PfxAmbulanceWlEditor;
         "pfx-ambulance-wl-list": PfxAmbulanceWlList;
     }
 }
@@ -31,6 +69,8 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
+            "pfx-ambulance-wl-app": LocalJSX.PfxAmbulanceWlApp & JSXBase.HTMLAttributes<HTMLPfxAmbulanceWlAppElement>;
+            "pfx-ambulance-wl-editor": LocalJSX.PfxAmbulanceWlEditor & JSXBase.HTMLAttributes<HTMLPfxAmbulanceWlEditorElement>;
             "pfx-ambulance-wl-list": LocalJSX.PfxAmbulanceWlList & JSXBase.HTMLAttributes<HTMLPfxAmbulanceWlListElement>;
         }
     }

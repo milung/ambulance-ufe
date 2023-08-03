@@ -1,4 +1,4 @@
-import { Component, Host, h } from '@stencil/core';
+import { Component, Event, EventEmitter,  Host, h } from '@stencil/core';
 
 @Component({
   tag: 'pfx-ambulance-wl-list', // @_pfx_@
@@ -6,6 +6,8 @@ import { Component, Host, h } from '@stencil/core';
   shadow: true,
 })
 export class PfxAmbulanceWlList { // @_pfx_@
+
+  @Event({ eventName: "entry-clicked"}) entryClicked: EventEmitter<string>
 
   waitingPatients: any[]; 
   private async getWaitingPatientsAsync(){  
@@ -44,15 +46,15 @@ export class PfxAmbulanceWlList { // @_pfx_@
     return new Date(Date.parse(iso)).toLocaleTimeString()
   }
 
-
   render() {
     return (
       <Host>
         <md-list>   
-          {this.waitingPatients.map(entry =>   
+          {this.waitingPatients.map((entry, index) =>   
             <md-list-item   
               headline={entry.name}   
               supportingText={"Predpokladaný vstup: " + this.isoDateToLocale(entry.estimatedStart)}   
+              onClick={ () => this.entryClicked.emit(index.toString())}
             >   
               <md-icon slot="start">person</md-icon>   
             </md-list-item>   

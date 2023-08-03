@@ -8,7 +8,7 @@
       "dom",
       "es2022"
     ],
-    "moduleResolution": "node16",
+    "moduleResolution": "bundler",
     "module": "esnext",
     "target": "es2022",
     "noUnusedLocals": true,
