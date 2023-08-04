@@ -45,16 +45,19 @@ export class PfxAmbulanceWlApp { // @_pfx_@
       entryId = this.relativePath.split("/")[1]
     }
 
+    const navigate = (path:string) => {
+      const absolute = new URL(path, new URL(this.basePath, document.baseURI)).pathname;
+      window.navigation.navigate(absolute)
+    }
+
     return (
       <Host>
         { element === "editor" 
         ? <pfx-ambulance-wl-editor entry-id={entryId}
-          oneditor-closed={ () => window.navigation.navigate("./list")}
+          oneditor-closed={ () => navigate("./list")}
         ></pfx-ambulance-wl-editor>
         : <pfx-ambulance-wl-list 
-          onentry-clicked={ 
-            (ev: CustomEvent<string>)=>window.navigation.navigate("./entry/" + ev.detail) }
-          >
+          onentry-clicked={ (ev: CustomEvent<string>)=> navigate("./entry/" + ev.detail) } >
           </pfx-ambulance-wl-list>
         }
         
