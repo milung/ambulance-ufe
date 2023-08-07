@@ -28,5 +28,9 @@ export const config: Config = {
      * before it can run your tests
      */
     browserArgs: ['--no-sandbox', '--disable-setuid-sandbox'],
+    transformIgnorePatterns: ["/node_modules/(?!axios)"],
+    transform: {
+      "^.+\\.(js|jsx)$": "babel-jest",
+    },
   },
 };

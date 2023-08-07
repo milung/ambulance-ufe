@@ -13,7 +13,9 @@ export class PfxAmbulanceWlApp { // @_pfx_@
 
   @State() private relativePath = "";
 
-  @Prop() basePath: string=""
+  @Prop() basePath: string="";
+  @Prop() apiBase: string;
+  @Prop() ambulanceId: string;
 
   componentWillLoad() {
     const baseUri = new URL(this.basePath, document.baseURI || "/").pathname;
@@ -56,7 +58,7 @@ export class PfxAmbulanceWlApp { // @_pfx_@
         ? <pfx-ambulance-wl-editor entry-id={entryId}
           oneditor-closed={ () => navigate("./list")}
         ></pfx-ambulance-wl-editor>
-        : <pfx-ambulance-wl-list 
+        : <pfx-ambulance-wl-list  ambulance-id={this.ambulanceId} api-base={this.apiBase}
           onentry-clicked={ (ev: CustomEvent<string>)=> navigate("./entry/" + ev.detail) } >
           </pfx-ambulance-wl-list>
         }
@@ -64,5 +66,4 @@ export class PfxAmbulanceWlApp { // @_pfx_@
       </Host>
     );
   }
-
 }

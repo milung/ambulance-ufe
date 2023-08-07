@@ -1,4 +1,5 @@
-import { Component, Event, EventEmitter,  Host, h } from '@stencil/core';
+import { Component, Event, EventEmitter, Host, Prop, State, h } from '@stencil/core';
+import { AmbulanceWaitingListApiFactory, WaitingListEntry } from '../../api/ambulance-wl'
 
 @Component({
   tag: 'pfx-ambulance-wl-list', // @_pfx_@
@@ -7,59 +8,57 @@ import { Component, Event, EventEmitter,  Host, h } from '@stencil/core';
 })
 export class PfxAmbulanceWlList { // @_pfx_@
 
-  @Event({ eventName: "entry-clicked"}) entryClicked: EventEmitter<string>
+  @Event({ eventName: "entry-clicked" }) entryClicked: EventEmitter<string>
 
-  waitingPatients: any[]; 
-  private async getWaitingPatientsAsync(){  
-    return await Promise.resolve(  
-      [{  
-          name: 'Jožko Púčik',  
-          patientId: '10001',  
-          since: new Date(Date.now() - 10 * 60).toISOString(),  
-          estimatedStart: new Date(Date.now() + 65 * 60).toISOString(),  
-          estimatedDurationMinutes: 15,  
-          condition: 'Kontrola'  
-      }, {  
-          name: 'Bc. August Cézar',  
-          patientId: '10096',  
-          since: new Date(Date.now() - 30 * 60).toISOString(),  
-          estimatedStart: new Date(Date.now() + 30 * 60).toISOString(),  
-          estimatedDurationMinutes: 20,  
-          condition: 'Teploty'  
-      }, {  
-          name: 'Ing. Ferdinand Trety',  
-          patientId: '10028',  
-          since: new Date(Date.now() - 72 * 60).toISOString(),  
-          estimatedStart: new Date(Date.now() + 5 * 60).toISOString(),  
-          estimatedDurationMinutes: 15,  
-          condition: 'Bolesti hrdla'  
-      }]  
-    );  
-  } 
+  @Prop() apiBase: string
+  @Prop() ambulanceId: string
+
+  waitingPatients: WaitingListEntry[];
+
+  @State() errorMessage: string
+
+  private async getWaitingPatientsAsync(): Promise<WaitingListEntry[]> {
+  
+    try {
+      const response = await AmbulanceWaitingListApiFactory(undefined, this.apiBase).getWaitingListEntries(this.ambulanceId)
+
+      if (response.status < 299) {
+        return response.data
+      } else {
+        this.errorMessage = `Cannot retrieve list of waiting patients: ${response.statusText}`
+      }
+    } catch (err: any) {
+      this.errorMessage = `Cannot retrieve list of waiting patients: ${err.message || "unknown"}`
+    }
+    return [];
+  }
 
   async componentWillLoad() {
-    this.waitingPatients = await this.getWaitingPatientsAsync();
+    this.waitingPatients = await this.getWaitingPatientsAsync()
   }
-  
-  private isoDateToLocale(iso:string) {
-    if(!iso) return '';
+
+  private isoDateToLocale(iso: string) {
+    if (!iso) return '';
     return new Date(Date.parse(iso)).toLocaleTimeString()
   }
 
   render() {
     return (
       <Host>
-        <md-list>   
-          {this.waitingPatients.map((entry, index) =>   
-            <md-list-item   
-              headline={entry.name}   
-              supportingText={"Predpokladaný vstup: " + this.isoDateToLocale(entry.estimatedStart)}   
-              onClick={ () => this.entryClicked.emit(index.toString())}
-            >   
-              <md-icon slot="start">person</md-icon>   
-            </md-list-item>   
-          )}   
-        </md-list>   
+        {this.errorMessage
+          ? <div class="error">{this.errorMessage}</div>
+          : <md-list>
+            {this.waitingPatients.map((entry, index) =>
+              <md-list-item
+                headline={entry.name}
+                supportingText={"Predpokladaný vstup: " + this.isoDateToLocale(entry.estimatedStart)}
+                onClick={() => this.entryClicked.emit(index.toString())}
+              >
+                <md-icon slot="start">person</md-icon>
+              </md-list-item>
+            )}
+          </md-list>
+        }
       </Host>
     );
   }
