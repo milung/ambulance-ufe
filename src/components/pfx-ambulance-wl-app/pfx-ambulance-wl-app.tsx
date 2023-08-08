@@ -30,6 +30,7 @@ export class PfxAmbulanceWlApp { // @_pfx_@
 
     window.navigation?.addEventListener("navigate", (ev: Event) => {
       let path = new URL((ev as any).destination.url).pathname;
+      if ((ev as any).canIntercept) { (ev as any).intercept(); }
       toRelative(path);  
     });
     
@@ -56,6 +57,7 @@ export class PfxAmbulanceWlApp { // @_pfx_@
       <Host>
         { element === "editor" 
         ? <pfx-ambulance-wl-editor entry-id={entryId}
+          ambulance-id={this.ambulanceId} api-base={this.apiBase}
           oneditor-closed={ () => navigate("./list")}
         ></pfx-ambulance-wl-editor>
         : <pfx-ambulance-wl-list  ambulance-id={this.ambulanceId} api-base={this.apiBase}

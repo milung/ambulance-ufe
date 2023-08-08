@@ -1,5 +1,6 @@
-import { Component, Event, EventEmitter, Host, Prop, State, h } from '@stencil/core';
+import { Component, Event, EventEmitter, Host, Prop, State, h,} from '@stencil/core';
 import { AmbulanceWaitingListApiFactory, WaitingListEntry } from '../../api/ambulance-wl'
+
 
 @Component({
   tag: 'pfx-ambulance-wl-list', // @_pfx_@
@@ -18,23 +19,22 @@ export class PfxAmbulanceWlList { // @_pfx_@
   @State() errorMessage: string
 
   private async getWaitingPatientsAsync(): Promise<WaitingListEntry[]> {
-  
     try {
       const response = await AmbulanceWaitingListApiFactory(undefined, this.apiBase).getWaitingListEntries(this.ambulanceId)
 
       if (response.status < 299) {
         return response.data
       } else {
-        this.errorMessage = `Cannot retrieve list of waiting patients: ${response.statusText}`
+        this.errorMessage = `Cannot retrieve entry: ${response.statusText}`
       }
     } catch (err: any) {
-      this.errorMessage = `Cannot retrieve list of waiting patients: ${err.message || "unknown"}`
+      this.errorMessage = `Cannot retrieve entry: ${err.message || "unknown"}`
     }
     return [];
   }
 
   async componentWillLoad() {
-    this.waitingPatients = await this.getWaitingPatientsAsync()
+    this.waitingPatients = await this.getWaitingPatientsAsync();
   }
 
   private isoDateToLocale(iso: string) {
@@ -48,17 +48,21 @@ export class PfxAmbulanceWlList { // @_pfx_@
         {this.errorMessage
           ? <div class="error">{this.errorMessage}</div>
           : <md-list>
-            {this.waitingPatients.map((entry, index) =>
+            {this.waitingPatients.map((entry) =>
               <md-list-item
                 headline={entry.name}
                 supportingText={"Predpokladaný vstup: " + this.isoDateToLocale(entry.estimatedStart)}
-                onClick={() => this.entryClicked.emit(index.toString())}
+                onClick={() => this.entryClicked.emit(entry.id)}
               >
                 <md-icon slot="start">person</md-icon>
               </md-list-item>
             )}
           </md-list>
         }
+        <md-filled-icon-button class="add-button"
+          onclick={() => this.entryClicked.emit("@new")}>
+          <md-icon>add</md-icon>
+        </md-filled-icon-button>
       </Host>
     );
   }

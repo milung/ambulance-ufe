@@ -196,7 +196,7 @@ paths:
               $ref: "#/components/schemas/WaitingListEntry"
         description: Waiting list entry to store
         required: true
-  "/waiting-list/{ambulanceId}/entry/{entryId}":
+  "/waiting-list/{ambulanceId}/entries/{entryId}":
     get:
       tags:
         - ambulanceDevelopers

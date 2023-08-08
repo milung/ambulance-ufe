@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "@material/web": "^1.0.0-pre.14",
-    "@stencil/core": "^4.0.0",
+    "@stencil/core": "^4.0.4",
     "axios": "^1.4.0",
     "puppeteer": "^20.7.4"
   },

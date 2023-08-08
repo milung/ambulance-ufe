@@ -24,6 +24,16 @@ class PolyNavigateEvent extends Event {
     destination: PolyNavigationDestination;
     canIntercept: boolean = true;
     info: any
+    isIntercepted = false;
+
+    intercept(_options?: any ) {
+        this.isIntercepted = true;
+        // options are ignored in this implementation, e.g. no handler or scroll
+    }
+
+    scroll(_options?: any ) {
+        // not implemented 
+    }
 }
 
 export function registerNavigationApi() {
@@ -61,8 +71,13 @@ export function registerNavigationApi() {
             url: string, 
             options?: {state?: any; info?: any; history?: "auto" | "replace" | "push";}
         ) => {
-            oldPushState(options?.state || {}, '', url);
+            const ev = new PolyNavigateEvent(url);
             window.navigation.dispatchEvent(new PolyNavigateEvent(url), options?.info);
+            if (ev.isIntercepted) {
+                oldPushState(options?.state || {}, '', url);
+            } else {
+                window.open(url, "_self");
+            }
         }
 
         window.navigation.back = (

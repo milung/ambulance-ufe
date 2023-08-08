@@ -12,6 +12,8 @@ export namespace Components {
         "basePath": string;
     }
     interface PfxAmbulanceWlEditor {
+        "ambulanceId": string;
+        "apiBase": string;
         "entryId": string;
     }
     interface PfxAmbulanceWlList {
@@ -59,6 +61,8 @@ declare namespace LocalJSX {
         "basePath"?: string;
     }
     interface PfxAmbulanceWlEditor {
+        "ambulanceId"?: string;
+        "apiBase"?: string;
         "entryId"?: string;
         "onEditor-closed"?: (event: PfxAmbulanceWlEditorCustomEvent<string>) => void;
     }
