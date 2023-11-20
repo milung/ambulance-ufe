@@ -32,14 +32,15 @@
     "openapi": "openapi-generator-cli generate"
   },
   "dependencies": {
-    "@material/web": "^1.0.0-pre.14",
-    "@stencil/core": "^4.0.4",
-    "axios": "^1.4.0",
-    "puppeteer": "^20.7.4"
+    "@material/web": "^1.0.1",
+    "@stencil/core": "^4.7.0",
+    "axios": "^1.4.0"
   },
   "devDependencies": {
+    
+    "puppeteer": "^20.7.4",
     "@babel/preset-env": "^7.22.9",
-    "@openapitools/openapi-generator-cli": "^2.7.0",
+    "@openapitools/openapi-generator-cli": "^2.5.2",
     "@types/jest": "^27.5.2",
     "@types/node": "^16.18.11",
     "axios-mock-adapter": "^1.21.5",

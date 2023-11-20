@@ -1,4 +1,4 @@
-# pfx-ambulance-wl-list
+# pfx-ambulance-wl-app
 
 
 
@@ -11,26 +11,22 @@
 | ------------- | -------------- | ----------- | -------- | ----------- |
 | `ambulanceId` | `ambulance-id` |             | `string` | `undefined` |
 | `apiBase`     | `api-base`     |             | `string` | `undefined` |
-
-
-## Events
-
-| Event           | Description | Type                  |
-| --------------- | ----------- | --------------------- |
-| `entry-clicked` |             | `CustomEvent<string>` |
+| `basePath`    | `base-path`    |             | `string` | `""`        |
 
 
 ## Dependencies
 
-### Used by
+### Depends on
 
- - [pfx-ambulance-wl-app](../pfx-ambulance-wl-app)
+- [pfx-ambulance-wl-editor](../pfx-ambulance-wl-editor)
+- [pfx-ambulance-wl-list](../pfx-ambulance-wl-list)
 
 ### Graph
 ```mermaid
 graph TD;
+  pfx-ambulance-wl-app --> pfx-ambulance-wl-editor
   pfx-ambulance-wl-app --> pfx-ambulance-wl-list
-  style pfx-ambulance-wl-list fill:#f9f,stroke:#333,stroke-width:4px
+  style pfx-ambulance-wl-app fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
 ----------------------------------------------

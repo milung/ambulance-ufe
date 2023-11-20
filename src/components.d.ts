@@ -36,13 +36,35 @@ declare global {
         prototype: HTMLPfxAmbulanceWlAppElement;
         new (): HTMLPfxAmbulanceWlAppElement;
     };
+    interface HTMLPfxAmbulanceWlEditorElementEventMap {
+        "editor-closed": string;
+    }
     interface HTMLPfxAmbulanceWlEditorElement extends Components.PfxAmbulanceWlEditor, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLPfxAmbulanceWlEditorElementEventMap>(type: K, listener: (this: HTMLPfxAmbulanceWlEditorElement, ev: PfxAmbulanceWlEditorCustomEvent<HTMLPfxAmbulanceWlEditorElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLPfxAmbulanceWlEditorElementEventMap>(type: K, listener: (this: HTMLPfxAmbulanceWlEditorElement, ev: PfxAmbulanceWlEditorCustomEvent<HTMLPfxAmbulanceWlEditorElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLPfxAmbulanceWlEditorElement: {
         prototype: HTMLPfxAmbulanceWlEditorElement;
         new (): HTMLPfxAmbulanceWlEditorElement;
     };
+    interface HTMLPfxAmbulanceWlListElementEventMap {
+        "entry-clicked": string;
+    }
     interface HTMLPfxAmbulanceWlListElement extends Components.PfxAmbulanceWlList, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLPfxAmbulanceWlListElementEventMap>(type: K, listener: (this: HTMLPfxAmbulanceWlListElement, ev: PfxAmbulanceWlListCustomEvent<HTMLPfxAmbulanceWlListElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLPfxAmbulanceWlListElementEventMap>(type: K, listener: (this: HTMLPfxAmbulanceWlListElement, ev: PfxAmbulanceWlListCustomEvent<HTMLPfxAmbulanceWlListElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLPfxAmbulanceWlListElement: {
         prototype: HTMLPfxAmbulanceWlListElement;

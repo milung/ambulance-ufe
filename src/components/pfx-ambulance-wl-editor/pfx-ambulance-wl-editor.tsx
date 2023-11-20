@@ -3,11 +3,11 @@ import { AmbulanceConditionsApiFactory, AmbulanceWaitingListApiFactory, Conditio
 
 
 @Component({
-  tag: 'pfx-ambulance-wl-editor', // @_pfx_@
-  styleUrl: 'pfx-ambulance-wl-editor.css', // @_pfx_@
+  tag: 'pfx-ambulance-wl-editor',
+  styleUrl: 'pfx-ambulance-wl-editor.css',
   shadow: true,
 })
-export class PfxAmbulanceWlEditor {  // @_pfx_@
+export class PfxAmbulanceWlEditor {
 
   @Prop() entryId: string;
   @Prop() ambulanceId: string;
@@ -25,14 +25,15 @@ export class PfxAmbulanceWlEditor {  // @_pfx_@
   private formElement: HTMLFormElement;
 
   private async getWaitingEntryAsync(): Promise<WaitingListEntry> {
-    if(this.entryId === "@new") {
+    if (this.entryId === "@new") {
       this.isValid = false;
       this.entry = {
         id: "@new",
         patientId: "",
-        waitingSince: null,
+        waitingSince: new Date().toISOString(),
         estimatedDurationMinutes: 15
       };
+      this.entry.estimatedStart = (await this.assumedEntryDateAsync()).toISOString();
       return this.entry;
     }
 
@@ -53,6 +54,23 @@ export class PfxAmbulanceWlEditor {  // @_pfx_@
       this.errorMessage = `Cannot retrieve list of waiting patients: ${err.message || "unknown"}`
     }
     return undefined;
+  }
+
+  private async assumedEntryDateAsync(): Promise<Date> {
+    try {
+      const response = await AmbulanceWaitingListApiFactory(undefined, this.apiBase)
+        .getWaitingListEntries(this.ambulanceId)
+      if (response.status > 299) {
+        return new Date();
+      }
+      const lastPatientOut = response.data
+        .map((_: WaitingListEntry) =>
+          Date.parse(_.estimatedStart) + _.estimatedDurationMinutes * 60 * 1000)
+        .reduce((acc: number, value: number) => Math.max(acc, value), 0);
+      return new Date(Math.max(Date.now(), lastPatientOut));
+    } catch (err: any) {
+      return new Date();
+    }
   }
 
   private async getConditions(): Promise<Condition[]> {
@@ -95,18 +113,23 @@ export class PfxAmbulanceWlEditor {  // @_pfx_@
           <md-filled-text-field label="Meno a Priezvisko"
             required value={this.entry?.name}
             oninput={(ev: InputEvent) => { if (this.entry) { this.entry.name = this.handleInputEvent(ev) } }}>
-            <md-icon slot="leadingicon">person</md-icon>
+            <md-icon slot="leading-icon">person</md-icon>
           </md-filled-text-field>
 
           <md-filled-text-field label="Registračné číslo pacienta"
             required value={this.entry?.patientId}
             oninput={(ev: InputEvent) => { if (this.entry) { this.entry.patientId = this.handleInputEvent(ev) } }}>
-            <md-icon slot="leadingicon">fingerprint</md-icon>
+            <md-icon slot="leading-icon">fingerprint</md-icon>
           </md-filled-text-field>
 
           <md-filled-text-field label="Čakáte od" disabled
-            value={this.entry?.waitingSince}>
-            <md-icon slot="leadingicon">watch_later</md-icon>
+            value={new Date(this.entry?.waitingSince || Date.now()).toLocaleTimeString()}>
+            <md-icon slot="leading-icon">watch_later</md-icon>
+          </md-filled-text-field>
+
+          <md-filled-text-field label="Predpokladaný čas vyšetrenia" disabled
+            value={new Date(this.entry?.estimatedStart || Date.now()).toLocaleTimeString()}>
+            <md-icon slot="leading-icon">login</md-icon>
           </md-filled-text-field>
 
           {this.renderConditions()}
@@ -128,7 +151,7 @@ export class PfxAmbulanceWlEditor {  // @_pfx_@
         <md-divider inset></md-divider>
 
         <div class="actions">
-          <md-tonal-button id="delete" disabled={!this.entry || this.entry?.id === "@new" }
+          <md-tonal-button id="delete" disabled={!this.entry || this.entry?.id === "@new"}
             onClick={() => this.deleteEntry()} >
             <md-icon slot="icon">delete</md-icon>
             Zmazať
@@ -161,34 +184,34 @@ export class PfxAmbulanceWlEditor {  // @_pfx_@
     }
     return (
       <md-filled-select label="Dôvod návštevy"
-        displayText={this.entry?.condition?.value}
+        display-text={this.entry?.condition?.value}
         oninput={(ev: InputEvent) => this.handleCondition(ev)} >
-        <md-icon slot="leadingicon">sick</md-icon>
-        {this.entry?.condition?.reference
-        ? <md-icon slot="trailingicon" class="link"
-            onclick={()=> window.open(this.entry.condition.reference, "_blank")}>
-              open_in_new
-            </md-icon>
-        : undefined
+        <md-icon slot="leading-icon">sick</md-icon>
+        {this.entry?.condition?.reference ?
+          <md-icon slot="trailing-icon" class="link"
+            onclick={() => window.open(this.entry.condition.reference, "_blank")}>
+            open_in_new
+          </md-icon>
+          : undefined
         }
         {conditions.map(condition => {
           return (
             <md-select-option
-              value={condition.code} headline={condition.value}
+              value={condition.code}
               selected={condition.code === this.entry?.condition?.code}>
+              <div slot="headline">{condition.value}</div>
             </md-select-option>
           )
-        }
-
-        )}
+        })}
       </md-filled-select>
     );
   }
 
   private handleCondition(ev: InputEvent) {
     if (this.entry) {
-      this.entry.condition.code = this.handleInputEvent(ev)
-      const condition = this.conditions.find(condition => condition.code === this.entry.condition.code);
+      const code = this.handleInputEvent(ev)
+      const condition = this.conditions.find(condition => condition.code === code);
+      this.entry.condition = Object.assign({}, condition);
       this.entry.estimatedDurationMinutes = condition.typicalDurationMinutes;
       this.duration = condition.typicalDurationMinutes;
     }
@@ -212,11 +235,11 @@ export class PfxAmbulanceWlEditor {  // @_pfx_@
   private async updateEntry() {
     try {
       const api = AmbulanceWaitingListApiFactory(undefined, this.apiBase);
-      const response 
-        = this.entryId === "@new" 
-        ? await api.createWaitingListEntry(this.ambulanceId, this.entry)
-        : await api.updateWaitingListEntry(this.ambulanceId, this.entryId, this.entry);
-      
+      const response
+        = this.entryId === "@new"
+          ? await api.createWaitingListEntry(this.ambulanceId, this.entry)
+          : await api.updateWaitingListEntry(this.ambulanceId, this.entryId, this.entry);
+
       if (response.status < 299) {
         this.editorClosed.emit("store")
       } else {

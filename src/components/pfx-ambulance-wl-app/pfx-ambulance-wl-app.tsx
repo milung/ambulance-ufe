@@ -39,6 +39,7 @@ export class PfxAmbulanceWlApp { // @_pfx_@
 
 
   render() {
+    console.debug("<pfx>-ambulance-wl-app.render() - path: %s", this.relativePath);
     let element = "list"
     let entryId = "@new"
 
@@ -60,8 +61,9 @@ export class PfxAmbulanceWlApp { // @_pfx_@
           ambulance-id={this.ambulanceId} api-base={this.apiBase}
           oneditor-closed={ () => navigate("./list")}
         ></pfx-ambulance-wl-editor>
-        : <pfx-ambulance-wl-list  ambulance-id={this.ambulanceId} api-base={this.apiBase}
-          onentry-clicked={ (ev: CustomEvent<string>)=> navigate("./entry/" + ev.detail) } >
+        : <pfx-ambulance-wl-list
+            ambulance-id={this.ambulanceId} api-base={this.apiBase}
+            onentry-clicked={ (ev: CustomEvent<string>)=> navigate("./entry/" + ev.detail) } >
           </pfx-ambulance-wl-list>
         }
         

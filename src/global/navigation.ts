@@ -23,7 +23,7 @@ class PolyNavigateEvent extends Event {
 
     destination: PolyNavigationDestination;
     canIntercept: boolean = true;
-    info: any
+    info: any;
     isIntercepted = false;
 
     intercept(_options?: any ) {
@@ -40,7 +40,7 @@ export function registerNavigationApi() {
     if (!window.navigation) {
         // simplified version of navigation api
         window.navigation = new EventTarget();
-        const oldPushState = window.history.pushState;
+        const oldPushState = window.history.pushState.bind(window.history);
 
         window.history.pushState = (f => function pushState() {
             var ret = f.apply(this, arguments);
@@ -71,8 +71,8 @@ export function registerNavigationApi() {
             url: string, 
             options?: {state?: any; info?: any; history?: "auto" | "replace" | "push";}
         ) => {
-            const ev = new PolyNavigateEvent(url);
-            window.navigation.dispatchEvent(new PolyNavigateEvent(url), options?.info);
+            const ev = new PolyNavigateEvent(url, options?.info);
+            window.navigation.dispatchEvent(ev);
             if (ev.isIntercepted) {
                 oldPushState(options?.state || {}, '', url);
             } else {
