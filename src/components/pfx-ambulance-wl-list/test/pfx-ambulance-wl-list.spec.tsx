@@ -1,11 +1,11 @@
 import { newSpecPage } from '@stencil/core/testing';
-import { PfxAmbulanceWlList } from '../pfx-ambulance-wl-list';  // @_pfx_@
+import { PfxAmbulanceWlList } from '../pfx-ambulance-wl-list'; 
 
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import { WaitingListEntry } from '../../../api/ambulance-wl';
 
-describe('pfx-ambulance-wl-list', () => {  // @_pfx_@
+describe('pfx-ambulance-wl-list', () => { 
 
   const sampleEntries: WaitingListEntry[] = [
     {
@@ -22,22 +22,22 @@ describe('pfx-ambulance-wl-list', () => {  // @_pfx_@
       estimatedDurationMinutes: 5
     }];
 
-    let mock: MockAdapter;
+   let mock: MockAdapter;
 
-    beforeAll(() => { mock = new MockAdapter(axios); });
-    afterEach(() => { mock.reset(); });
+   beforeAll(() => { mock = new MockAdapter(axios); });
+   afterEach(() => { mock.reset(); });
 
    it('renders sample entries', async () => {
 
     mock.onGet().reply(200, sampleEntries);
 
     const page = await newSpecPage({
-      components: [PfxAmbulanceWlList],  // @_pfx_@
-      html: `<pfx-ambulance-wl-list ambulance-id="test-ambulance" api-base="http://test/api"></pfx-ambulance-wl-list>`,  // @_pfx_@
+      components: [PfxAmbulanceWlList],
+      html: `<pfx-ambulance-wl-list ambulance-id="test-ambulance" api-base="http://test/api"></pfx-ambulance-wl-list>`,
+      url: "http://localhost/"
     });
 
-    
-    const wlList = page.rootInstance as PfxAmbulanceWlList; // @_pfx_@
+    const wlList = page.rootInstance as PfxAmbulanceWlList;
     const expectedPatients = wlList?.waitingPatients?.length
 
     const items = page.root.shadowRoot.querySelectorAll("md-list-item");
@@ -45,24 +45,25 @@ describe('pfx-ambulance-wl-list', () => {  // @_pfx_@
     expect(items.length).toEqual(expectedPatients);
   });
 
-  it('renders error message on network issues', async () => {
+    it('renders error message on network issues', async () => {
 
-    mock.onGet().networkError();
+      mock.onGet().networkError();
 
-    const page = await newSpecPage({
-      components: [PfxAmbulanceWlList],  // @_pfx_@
-      html: `<pfx-ambulance-wl-list ambulance-id="test-ambulance" api-base="http://test/api"></pfx-ambulance-wl-list>`,  // @_pfx_@
+      const page = await newSpecPage({
+        components: [PfxAmbulanceWlList], 
+        html: `<pfx-ambulance-wl-list ambulance-id="test-ambulance" api-base="http://test/api"></pfx-ambulance-wl-list>`, 
+        url: "http://localhost/"
+      });
+
+      
+      const wlList = page.rootInstance as PfxAmbulanceWlList;
+      const expectedPatients = wlList?.waitingPatients?.length
+
+      const errorMessage =  page.root.shadowRoot.querySelectorAll(".error");
+      const items = page.root.shadowRoot.querySelectorAll("md-list-item");
+      
+      expect(errorMessage.length).toBeGreaterThanOrEqual(1)
+      expect(expectedPatients).toEqual(0);
+      expect(items.length).toEqual(expectedPatients);
     });
-
-    
-    const wlList = page.rootInstance as PfxAmbulanceWlList; // @_pfx_@
-    const expectedPatients = wlList?.waitingPatients?.length
-
-    const errorMessage =  page.root.shadowRoot.querySelectorAll(".error");
-    const items = page.root.shadowRoot.querySelectorAll("md-list-item");
-    
-    expect(errorMessage.length).toBeGreaterThanOrEqual(1)
-    expect(expectedPatients).toEqual(0);
-    expect(items.length).toEqual(expectedPatients);
-  });
 });

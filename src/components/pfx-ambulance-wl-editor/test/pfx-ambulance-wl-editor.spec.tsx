@@ -1,11 +1,11 @@
 import { newSpecPage } from '@stencil/core/testing';
-import { PfxAmbulanceWlEditor } from '../pfx-ambulance-wl-editor'; // @_pfx_@
+import { PfxAmbulanceWlEditor } from '../pfx-ambulance-wl-editor'; 
 
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import { Condition, WaitingListEntry } from '../../../api/ambulance-wl';
 
-describe('pfx-ambulance-wl-editor', () => { // @_pfx_@
+describe('pfx-ambulance-wl-editor', () => {
   const sampleEntry: WaitingListEntry = {
     id: "entry-1",
     patientId: "p-1",
@@ -49,8 +49,8 @@ describe('pfx-ambulance-wl-editor', () => { // @_pfx_@
     mock.onGet(/^.*\/condition$/).reply(200, sampleConditions);
 
     const page = await newSpecPage({
-      components: [PfxAmbulanceWlEditor], // @_pfx_@
-      html: `<pfx-ambulance-wl-editor entry-id="test-entry" ambulance-id="test-ambulance" api-base="http://sample.test/api"></pfx-ambulance-wl-editor>`, // @_pfx_@
+      components: [PfxAmbulanceWlEditor], 
+      html: `<pfx-ambulance-wl-editor entry-id="test-entry" ambulance-id="test-ambulance" api-base="/api"></pfx-ambulance-wl-editor>`
     });
 
     await delay(300);
@@ -71,8 +71,8 @@ describe('pfx-ambulance-wl-editor', () => { // @_pfx_@
     mock.onGet(/^.*\/condition$/).reply(200, sampleConditions);
 
     const page = await newSpecPage({
-      components: [PfxAmbulanceWlEditor], // @_pfx_@
-      html: `<pfx-ambulance-wl-editor entry-id="test-entry" ambulance-id="test-ambulance" api-base="http://sample.test/api"></pfx-ambulance-wl-editor>`, // @_pfx_@
+      components: [PfxAmbulanceWlEditor], 
+      html: `<pfx-ambulance-wl-editor entry-id="test-entry" ambulance-id="test-ambulance" api-base="http://sample.test/api/"></pfx-ambulance-wl-editor>`, 
     });
     await delay(300);
     await page.waitForChanges();
@@ -81,7 +81,6 @@ describe('pfx-ambulance-wl-editor', () => { // @_pfx_@
     expect(items.length).toBeGreaterThanOrEqual(1);
     const item = items[0] as HTMLInputElement;
     expect(item.getAttribute("value")).toEqual(sampleEntry.name);
-    
   });
 
 });

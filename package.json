@@ -34,16 +34,16 @@
   "dependencies": {
     "@material/web": "^1.0.1",
     "@stencil/core": "^4.7.0",
-    "axios": "^1.4.0"
+    "axios": "1.6.0"
   },
   "devDependencies": {
     
     "puppeteer": "^20.7.4",
-    "@babel/preset-env": "^7.22.9",
+    "@babel/preset-env": "^7.22.20",
     "@openapitools/openapi-generator-cli": "^2.5.2",
     "@types/jest": "^27.5.2",
     "@types/node": "^16.18.11",
-    "axios-mock-adapter": "^1.21.5",
+    "axios-mock-adapter": "^1.22.0",
     "babel-jest": "^27.5.1",
     "jest": "^27.5.1",
     "jest-cli": "^27.5.1",
